@@ -7,11 +7,14 @@ FROM nginx:stable-alpine
 # Remove default nginx content
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy site files into nginx html directory
-COPY . /usr/share/nginx/html
+# Copy the website/ folder into nginx html directory
+# This Dockerfile lives at the repository root and expects a `website/` folder
+# containing the site (so Coolify can build from the repo root while using
+# website/ as the actual site content).
+COPY website/ /usr/share/nginx/html
 
-# Custom nginx config (optional override)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# If a custom nginx config is present inside website/, copy it
+COPY website/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
