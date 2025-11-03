@@ -1,0 +1,9 @@
+# Ignore git and local files when building the Docker image
+.git
+.gitignore
+server.log
+*.pyc
+__pycache__/
+.venv/
+node_modules/
+*.env
