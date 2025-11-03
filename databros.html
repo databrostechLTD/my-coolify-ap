@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataBros Tech | AI, Data & Automation Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Aleo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #001F3F;
+            --secondary: #0074D9;
+            --accent: #b9e3ff;
+            --light: #ffffff;
+            --dark: #111111;
+            --gray: #7F8C8D; 
+            --light-gray: #F5F7FA;
+            --border: #E0E6ED;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: var(--light);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Aleo', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--light);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-svg {
+            width: 65px;
+            height: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Aleo', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+            margin-left: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .nav-menu a:hover {
+            color: var(--secondary);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--light);
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            padding: 10px 0;
+            list-style: none; /* remove default bullets */
+            padding-left: 0; /* remove default left padding so custom bullets align */
+            border: 1px solid var(--border);
+        }
+
+        /* Dropdown list bullet highlight */
+        .dropdown-menu li {
+            margin: 0;
+            width: 100%;
+            position: relative; /* for bullet positioning */
+            padding-left: 34px; /* space for the bullet */
+        }
+
+        .dropdown-menu li::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.18s ease;
+            box-shadow: none;
+        }
+
+        /* highlight bullet on hover/focus */
+        .dropdown-menu li:hover::before,
+        .dropdown-menu li:focus-within::before,
+        .dropdown-menu a:hover + .dropdown-menu li::before {
+            background: var(--secondary);
+            box-shadow: 0 0 0 6px rgba(0, 116, 217, 0.12);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        /* ensure the link text still has its own hover background */
+        .dropdown-menu a:hover {
+            background-color: var(--light-gray);
+            padding-left: 25px;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+            width: 100%;
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            display: block;
+            font-weight: 400;
+            transition: all 0.2s;
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--light-gray);
+            padding-left: 25px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown > a::after {
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-left: 8px;
+            font-size: 0.8em;
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .cta-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #001a33 100%);
+            padding: 180px 0 120px;
+            margin-top: 0;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding-right: 50px;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            font-weight: 700;
+            color: white;
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+            max-width: 90%;
+        }
+
+        .hero-cta {
+            background: var(--accent);
+            color: var(--primary);
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .hero-cta:hover {
+            background:  #38b6ff;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 40px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .feature-icon i {
+            font-size: 24px;
+            color: var(--secondary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background: var(--light-gray);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            font-size: 40px;
+            color: var(--secondary);
+            margin-bottom: 25px;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .service-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Blog Section */
+        .blog {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-image {
+            height: 200px;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+
+        .blog-content {
+            padding: 25px;
+        }
+
+        .blog-meta {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .blog-date {
+            margin-right: 15px;
+        }
+
+        .blog-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .blog-card p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .read-more i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+
+        .read-more:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .admin-panel a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .admin-panel a i {
+            margin-right: 8px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background-color: var(--light-gray);
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .author-info p {
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: var(--primary);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .cta-section .cta-button {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Footer styles moved to assets/css/shared.css to centralize site styling */
+
+        /* Blog Form (Hidden by default) */
+        .blog-form-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blog-form {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            width: 95%;
+            max-width: 1100px; /* widened for desktop */
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            margin: 0 20px;
+        }
+
+        .blog-form h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: horizontal;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-button {
+            background: #ddd;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .submit-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Responsive rules moved to assets/css/shared.css */
+    </style>
+</head>
+<body>
+    <!-- Shared header will be injected here -->
+    <div id="site-header-placeholder"></div>
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <script src="assets/js/header.js" defer></script>
+
+  
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Reimagine How Your Business Works with AI, Data, and Automation.</h1>
+                <p>From insights to implementation, we help you transform complex processes into intelligent, automated systems that deliver measurable results.</p>
+                <button class="cta-button hero-cta">Start Your Transformation</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Data Analytics Visualization">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose DataBros Tech</h2>
+                <p>We combine industry expertise with cutting-edge technology to deliver data solutions that drive real business value.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Leverage machine learning and AI to uncover insights and predict future trends with precision.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Data Integration</h3>
+                    <p>Seamlessly connect all your data sources into a unified, actionable data ecosystem.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security & Compliance</h3>
+                    <p>Enterprise-grade security protocols to protect your most valuable asset - your data.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Rapid Implementation</h3>
+                    <p>Get your data solutions up and running faster with our streamlined implementation process.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Expert Team</h3>
+                    <p>Work with certified data scientists, engineers, and business intelligence specialists.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Ongoing Support</h3>
+                    <p>Continuous optimization and support to ensure your data solutions evolve with your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Data Solutions</h2>
+                <p>Comprehensive data services tailored to your unique business challenges and objectives.</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Build predictive models and AI solutions that automate processes and enhance decision-making.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Business Intelligence</h3>
+                    <p>Transform raw data into actionable insights with powerful dashboards and reporting tools.</p>
+                </div>
+                
+                <div class="service-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Data Engineering</h3>
+                    <p>Design and implement robust data pipelines and infrastructure for scalable analytics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog">
+        <div class="container">
+            <div class="section-title">
+                <h2>Latest From Our Blog</h2>
+                <p>Stay updated with the latest trends, insights, and innovations in data analytics and AI.</p>
+            </div>
+            
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">June 15, 2023</span>
+                            <span class="blog-category">Data Analytics</span>
+                        </div>
+                        <h3>The Future of Predictive Analytics in Business</h3>
+                        <p>Discover how predictive analytics is transforming decision-making processes across industries.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">June 8, 2023</span>
+                            <span class="blog-category">AI & ML</span>
+                        </div>
+                        <h3>Implementing AI Solutions: A Practical Guide</h3>
+                        <p>Learn the key steps to successfully implement AI solutions in your organization.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-image">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">May 30, 2023</span>
+                            <span class="blog-category">Cloud Computing</span>
+                        </div>
+                        <h3>Maximizing ROI with Cloud Data Solutions</h3>
+                        <p>Explore strategies to optimize your cloud data infrastructure for maximum return on investment.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin panel moved to separate page: admin.html -->
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Clients Say</h2>
+                <p>Hear from businesses that have transformed their operations with our data solutions.</p>
+            </div>
+            
+            <div class="testimonial-slider">
+                <div class="testimonial">
+                    <p class="testimonial-text">"DataBros Tech helped us implement a comprehensive data analytics platform that increased our operational efficiency by 40%. Their team's expertise and dedication were exceptional."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JS</div>
+                        <div class="author-info">
+                            <h4>Jennifer Smith</h4>
+                            <p>CTO, TechFlow Solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Unlock the Power of Your Data?</h2>
+            <p>Contact our team today for a complimentary consultation and discover how DataBros Tech can transform your business with data-driven insights.</p>
+            <button class="cta-button">Schedule a Consultation</button>
+        </div>
+    </section>
+
+    <!-- Footer placeholder: footer markup is injected from assets/js/footer.js -->
+    <div id="site-footer-placeholder"></div>
+    <script src="assets/js/footer.js" defer></script>
+
+    <script>
+        // Mobile menu toggle (guarded in case header hasn't been injected yet)
+        const _mobileMenu = document.querySelector('.mobile-menu');
+        if (_mobileMenu) {
+            _mobileMenu.addEventListener('click', function() {
+                const _nav = document.querySelector('.nav-menu');
+                if (_nav) _nav.classList.toggle('active');
+            });
+        }
+
+        // Mobile dropdown toggle
+        if (window.innerWidth <= 768) {
+            const dropdowns = document.querySelectorAll('.dropdown > a');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        this.parentElement.classList.toggle('active');
+                    }
+                });
+            });
+        }
+
+        // Header scroll effect (guarded)
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (!header) return;
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Admin panel moved to a separate page (admin.html). The inline modal handlers were removed to avoid runtime errors.
+
+        // Render blog posts from localStorage into the blog grid
+        function renderBlogPosts() {
+            const container = document.querySelector('.blog-grid');
+            if (!container) return;
+            const posts = JSON.parse(localStorage.getItem('databros_blog_posts') || '[]');
+
+            // If there are no saved posts, keep the existing static ones
+            if (!posts.length) return;
+
+            // Clear existing static cards
+            container.innerHTML = '';
+
+            posts.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'blog-card';
+                card.innerHTML = `
+                    <div class="blog-image">
+                        ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" style="width:100%;height:200px;object-fit:cover;border-radius:4px;">` : '<i class="fas fa-chart-bar"></i>'}
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">${escapeHtml(p.date)}</span>
+                            <span class="blog-category">${escapeHtml(p.category || 'General')}</span>
+                        </div>
+                        <h3>${escapeHtml(p.title)}</h3>
+                        <p>${escapeHtml(p.excerpt)}</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Very small helper to escape text for insertion into innerHTML
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Load and render posts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBlogPosts();
+        });
+    </script>
+</body>
+</html>

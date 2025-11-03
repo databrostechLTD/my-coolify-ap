@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — DataBros Tech</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Aleo:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body{color:var(--dark);background:var(--light)}
+    .container{max-width:900px;margin:0 auto;padding:24px}
+    .admin-card{background:#fff;border:1px solid #e6edf3;padding:24px;border-radius:8px}
+    .admin-card h1{font-family:'Aleo',serif;color:var(--primary);margin-bottom:12px}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;margin-bottom:6px}
+    .form-group input,.form-group textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:4px}
+    .actions{display:flex;gap:10px;justify-content:flex-end}
+    .btn{background:var(--primary);color:#fff;padding:10px 16px;border:none;border-radius:4px;cursor:pointer}
+  </style>
+</head>
+<body class="site">
+  <div id="site-header-placeholder"></div>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <script src="assets/js/header.js" defer></script>
+
+
+  <main class="container page-main-padding">
+    <div class="admin-card">
+      <h1>Admin — Publish a Blog Post</h1>
+      <p>Use this page to create blog posts that appear on the Blog page. Posts are saved locally in your browser (localStorage).</p>
+
+      <form id="admin-post-form">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input id="title" required>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <input id="category">
+        </div>
+        <div class="form-group">
+          <label for="excerpt">Excerpt</label>
+          <textarea id="excerpt" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Image URL (optional)</label>
+          <input id="image">
+        </div>
+        <div class="actions">
+          <a href="databros.html" class="btn admin-cancel-btn">Cancel</a>
+          <button class="btn" type="submit">Publish</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('admin-post-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const category = document.getElementById('category').value.trim();
+      const excerpt = document.getElementById('excerpt').value.trim();
+      const image = document.getElementById('image').value.trim();
+      if(!title || !excerpt){ alert('Title and excerpt are required'); return; }
+      const post = { id: 'post-'+Date.now(), title, category, excerpt, image, date: new Date().toLocaleDateString() };
+      const posts = JSON.parse(localStorage.getItem('databros_blog_posts')||'[]');
+      posts.unshift(post);
+      localStorage.setItem('databros_blog_posts', JSON.stringify(posts));
+      // Redirect to main page where blog posts render
+      window.location.href = 'databros.html';
+    });
+  </script>
+
+  <div id="site-footer-placeholder"></div>
+  <script src="assets/js/footer.js" defer></script>
+</body>
+</html>

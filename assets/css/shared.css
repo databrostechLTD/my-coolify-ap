@@ -1,0 +1,570 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Aleo:wght@300;400;700&display=swap');
+
+:root{--primary:#001F3F;--secondary:#0074D9;--light:#ffffff;--dark:#111111;--border:#E0E6ED}
+*{box-sizing:border-box}
+/* Global typography: Inter for UI, Aleo for headings */
+body{font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;color:var(--dark);background:var(--light);}
+h1,h2,h3,h4,h5,h6{font-family:'Aleo', serif}
+.header-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:20px}
+.site-header{background:var(--light);position:fixed;width:100%;top:0;z-index:1000;border-bottom:1px solid transparent}
+.site-header.scrolled{background:rgba(255,255,255,0.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-svg{width:65px;height:auto}
+.logo-text{font-family:'Aleo',serif;font-weight:700;color:var(--primary);font-size:1.2rem}
+.nav-menu{display:flex;list-style:none;align-items:center;margin:0;padding:0}
+.nav-menu li{position:relative;margin-left:30px}
+.nav-menu a{color:var(--dark);text-decoration:none;font-weight:500;display:flex;align-items:center}
+.cta-button{background:var(--primary);color:rgb(91, 160, 251);border:none;padding:12px 28px;border-radius:4px;cursor:pointer}
+.mobile-menu{display:none;font-size:24px}
+@media(max-width:768px){.nav-menu{display:none;position:absolute;top:70px;left:0;width:100%;background:#fff;flex-direction:column;padding:20px;box-shadow:0 5px 10px rgba(0,0,0,0.1);border-top:1px solid var(--border)}.nav-menu.active{display:flex}.mobile-menu{display:block}}
+
+/* Dropdown styles (desktop) */
+.dropdown-menu{position:absolute;top:100%;left:0;background:var(--light);min-width:220px;box-shadow:0 10px 30px rgba(0,0,0,0.1);border-radius:8px;opacity:0;visibility:hidden;transform:translateY(10px);transition:all 0.25s ease;z-index:100;padding:10px 0;list-style:none;padding-left:0;border:1px solid var(--border)}
+.dropdown-menu li{margin:0;width:100%;position:relative;padding-left:34px}
+.dropdown-menu li::before{content:"";position:absolute;left:12px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:transparent;transition:all .18s ease}
+.dropdown-menu a{display:block;padding:12px 20px;color:var(--dark);text-decoration:none}
+.dropdown-menu a:hover{background:var(--light);color:var(--secondary);padding-left:25px}
+.dropdown:hover > .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown > a::after{content:"\f107";font-family:"Font Awesome 5 Free";font-weight:900;margin-left:8px;font-size:.8em}
+
+/* Enhanced mobile navigation */
+@media (max-width: 768px) {
+  /* Improved mobile menu */
+  .mobile-menu {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.03);
+    transition: background 0.2s;
+  }
+  .mobile-menu:hover {
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* Better nav menu slide animation */
+  .nav-menu {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255,255,255,0.98);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 80px 24px 24px;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-menu.active {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Larger touch targets */
+  .nav-menu li {
+    margin: 0;
+    width: 100%;
+  }
+  .nav-menu a {
+    padding: 16px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+  }
+  .nav-menu a:hover {
+    background: rgba(0,104,199,0.06);
+  }
+
+  /* Enhanced dropdown on mobile */
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background: rgba(0,0,0,0.02);
+    margin: 4px 0 8px;
+    padding: 8px;
+    border-radius: 12px;
+    border: none;
+    display: none;
+  }
+  .dropdown.active > .dropdown-menu {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+  }
+  .dropdown-menu a {
+    padding: 14px 16px;
+    border-radius: 8px;
+  }
+  .dropdown > a::after {
+    margin-left: auto;
+    transition: transform 0.2s;
+  }
+  .dropdown.active > a::after {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Admin page small helpers */
+.admin-cancel-btn{background:#ccc;color:#111;text-decoration:none;padding:10px 16px;border-radius:4px;display:inline-flex;align-items:center}
+
+/* Ensure dropdown open state class is styled via CSS (was injected at runtime) */
+.dropdown.open > .dropdown-menu, .dropdown.open > .dropdown-menu{
+	opacity:1 !important;
+	visibility:visible !important;
+	transform:translateY(0) !important;
+}
+
+/* CTA highlight and contact modal styles */
+.cta-button{
+	background: linear-gradient(90deg, #0068c7 0%, #00a0ff 100%);
+	color: #fff !important;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	box-shadow: 0 6px 20px rgba(0,160,255,0.18);
+	transition: transform .18s ease, box-shadow .18s ease;
+	cursor: pointer;
+}
+.cta-button:focus,.cta-button:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,160,255,0.22)}
+
+/* Footer (shared) */
+footer {
+	background-color: var(--dark);
+	color: white;
+	padding: 80px 0 30px;
+}
+
+.footer-content {
+  .contact-modal-backdrop[aria-hidden="false"] {
+    opacity: 1;
+  }
+	/* inner constrained content while footer background spans full width */
+	max-width: 1200px;
+	margin: 0 auto 50px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 40px;
+	padding: 0 20px;
+}
+
+.footer-column h3 {
+	font-size: 1.3rem;
+	margin-bottom: 20px;
+	color: white;
+}
+
+.footer-column ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.footer-column ul li {
+	margin-bottom: 10px;
+}
+
+.footer-column a {
+	color: #ccc;
+	text-decoration: none;
+	transition: color 0.3s;
+	font-weight: 400;
+}
+
+.footer-column a:hover {
+	color: white;
+}
+
+.footer-bottom {
+	text-align: center;
+	padding-top: 30px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	color: #aaa;
+	font-size: 0.9rem;
+}
+
+.social-icons {
+	display: flex;
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.social-icons a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 50%;
+	color: white;
+	transition: all 0.3s;
+}
+
+.social-icons a:hover {
+	background-color: var(--secondary);
+	transform: translateY(-3px);
+	color: white;
+}
+
+/* Contact modal used by CTA and header */
+.contact-modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.85);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.contact-modal-backdrop[aria-hidden="false"] {
+  opacity: 1;
+}
+.contact-modal {
+  background: linear-gradient(160deg, #fff 0%, #f8faff 100%);
+  border-radius: 16px;
+  max-width: 720px;
+  width: 92%;
+  padding: 32px;
+  box-shadow: 0 30px 80px rgba(2,6,23,0.4);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.contact-modal-backdrop[aria-hidden="false"] .contact-modal {
+  transform: translateY(0);
+}
+
+.contact-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.contact-modal h2 {
+  margin: 0;
+  color: #0b2540;
+  font-family: 'Aleo',serif;
+  font-size: 1.8rem;
+}
+.contact-modal p {
+  color: #475569;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+}
+.contact-close {
+  background: transparent;
+  border: none;
+  color: #475569;
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin: -8px -8px 0 0;
+}
+.contact-close:hover {
+  background: rgba(0,0,0,0.05);
+  color: #1a1a1a;
+}
+
+/* Modern floating label form fields */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-field {
+  position: relative;
+  width: 100%;
+}
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e6eef8;
+  border-radius: 12px;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+.form-field textarea {
+  min-height: 120px;
+  max-height: 70vh;
+  overflow: auto;
+  resize: none;
+  line-height: 1.5;
+}
+.form-field label {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: #64748b;
+  transition: all 0.2s ease;
+  background: #fff;
+  padding: 0 4px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: #0068c7;
+  box-shadow: 0 0 0 4px rgba(0,104,199,0.1);
+  outline: none;
+}
+.form-field input:focus + label,
+.form-field textarea:focus + label,
+.form-field input:not(:placeholder-shown) + label,
+.form-field textarea:not(:placeholder-shown) + label {
+  transform: translateY(-24px) scale(0.85);
+  color: #0068c7;
+}
+
+.contact-message-wrap {
+  margin-bottom: 24px;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.contact-actions button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.contact-actions button[type="submit"] {
+  background: linear-gradient(135deg, #0068c7 0%, #00a0ff 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,104,199,0.2);
+}
+.contact-actions button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,104,199,0.25);
+}
+.contact-actions button[type="button"] {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+}
+.contact-actions button[type="button"]:hover {
+  background: #e2e8f0;
+}
+
+/* Mobile optimized modal and form */
+@media(max-width: 720px) {
+  .contact-modal-backdrop {
+    padding: 0;
+  }
+  .contact-modal { 
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .contact-modal-header {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  .contact-grid { 
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .contact-modal h2 {
+    font-size: 1.5rem;
+  }
+  
+  /* Larger touch targets */
+  .form-field input,
+  .form-field textarea {
+    padding: 16px;
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+  .contact-close {
+    width: 44px;
+    height: 44px;
+    margin: -12px -12px 0 0;
+  }
+  
+  /* Mobile form actions */
+  .contact-actions {
+    margin-top: auto;
+    padding-top: 20px;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+  .contact-actions button {
+    flex: 1;
+    padding: 16px;
+    font-size: 1rem;
+  }
+  
+  /* Prevent rubber-band scroll on iOS */
+  form {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 -20px;
+    padding: 0 20px;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Utility: consistent top padding for page mains (avoid inline style) */
+.page-main-padding{padding:120px 20px 100px} /* added bottom padding so pages have breathing room above footer */
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+	.page-main-padding { padding-top: 100px; padding-bottom: 60px; }
+	.site .container { padding-left: 22px; padding-right: 22px; }
+	.footer-content { gap: 30px; }
+}
+
+@media (max-width: 768px) {
+	.page-main-padding { padding-top: 90px; padding-bottom: 40px; }
+	.site .container { padding-left: 16px; padding-right: 16px; }
+	.footer-content { grid-template-columns: 1fr; margin-bottom: 30px; }
+	footer { padding: 60px 0 18px; }
+}
+
+/* Enhanced mobile responsive rules */
+@media (max-width: 992px) {
+  /* Tablet layout adjustments */
+  .hero-content { 
+    flex-direction: column;
+    gap: 40px;
+  }
+  .hero-text { 
+    padding-right: 0;
+    margin-bottom: 0;
+    text-align: center;
+  }
+  .hero-text h1 { 
+    font-size: 2.8rem;
+    line-height: 1.2;
+  }
+  .hero-text p { 
+    max-width: 100%;
+    font-size: 1.1rem;
+  }
+  
+  /* Better grid layouts on tablet */
+  .features-grid,
+  .services-grid,
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* Adjust section spacing */
+  .section-title {
+    margin-bottom: 40px;
+  }
+  .section-title h2 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile layout improvements */
+  .hero-text h1 { 
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+  }
+  .hero-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .section-title h2 { 
+    font-size: 1.8rem;
+  }
+  
+  /* Adjust section padding for mobile */
+  .hero { 
+    padding: 120px 0 60px;
+  }
+  .features, 
+  .services, 
+  .blog, 
+  .testimonials, 
+  .cta-section { 
+    padding: 60px 0;
+  }
+  
+  /* Single column grids on mobile */
+  .features-grid,
+  .services-grid,
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* Better card spacing */
+  .feature-card,
+  .service-card,
+  .blog-card {
+    padding: 24px;
+  }
+  
+  /* Improved mobile typography */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.8rem; }
+  h3 { font-size: 1.4rem; }
+  p { font-size: 1rem; line-height: 1.6; }
+  
+  /* Better touch targets */
+  .cta-button {
+    padding: 16px 28px;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+  
+  /* Improved mobile spacing */
+  .section-title {
+    margin-bottom: 32px;
+  }
+  .section-title p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}
+
+/* Apply slightly larger side padding for most site pages while leaving the homepage (databros.html) intact.
+	Pages that should receive this padding will have <body class="site"> */
+.site .container { padding-left: 30px; padding-right: 30px; }
