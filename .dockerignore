@@ -1,11 +1,11 @@
 # Ignore everything by default to keep image context small
 *
 
-# But include these repository files and the website folder
+# But include these repository files and the web folder
 !Dockerfile
 !nginx.conf
 !.dockerignore
-!website/
+!web/
 
 # Additional ignores for common local files
 server.log
