@@ -1,21 +1,26 @@
-# Simple Dockerfile to serve the static site with nginx
-# This copies the contents of the repository's `website/` directory into
-# nginx's html root so Coolify can build and serve the site.
-
+# Use official nginx image
 FROM nginx:stable-alpine
 
-# Remove default nginx content
-RUN rm -rf /usr/share/nginx/html/*
+# Remove default nginx config and files
+RUN rm -rf /usr/share/nginx/html/* && \
+    rm -rf /etc/nginx/conf.d/*
 
-# Copy the website/ folder into nginx html directory
-# This Dockerfile lives at the repository root and expects a `website/` folder
-# containing the site (so Coolify can build from the repo root while using
-# website/ as the actual site content).
-COPY web/ /usr/share/nginx/html
+# Copy your custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# If a custom nginx config is present at this level (website/nginx.conf), copy it
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy all your site files into nginx html directory
+COPY . /usr/share/nginx/html/
 
+# Set proper permissions
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
+
+# Expose port 80 for web traffic
 EXPOSE 80
 
+# Healthcheck to verify container health
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD wget -q --spider http://localhost/ || exit 1
+
+# Run nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
