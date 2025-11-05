@@ -1,16 +1,9 @@
-# Ignore everything by default to keep image context small
+# Ignore everything by default
 *
 
-# But include these repository files and the web folder
+# Include only necessary files
 !Dockerfile
 !nginx.conf
 !.dockerignore
-!web/
-
-# Additional ignores for common local files
-server.log
-*.pyc
-__pycache__/
-.venv/
-node_modules/
-*.env
+!assets/
+!*.html
